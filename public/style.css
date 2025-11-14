@@ -1,0 +1,708 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 15px;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+/* 主要布局 */
+.main-layout {
+    display: flex;
+    gap: 0;
+    background: #f8f9fa;
+}
+
+/* 地圖區域 */
+.map-section {
+    flex: 1;
+    padding: 25px;
+    min-width: 0;
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.map-header h2 {
+    color: #333;
+    font-size: 1.5em;
+}
+
+.map-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.map-container {
+    position: relative;
+    background: #e8f4f8;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#map-canvas {
+    display: block;
+    width: 100%;
+    height: 650px;
+    border-radius: 15px;
+}
+
+#speech-bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.speech-bubble {
+    position: absolute;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: 200px;
+    font-size: 0.85em;
+    line-height: 1.3;
+    animation: fadeIn 0.3s ease-out;
+    z-index: 10;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.map-legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.legend-icon {
+    font-size: 1.5em;
+}
+
+/* 側邊欄 */
+.sidebar {
+    width: 350px;
+    background: white;
+    border-left: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-header h2 {
+    color: #333;
+    font-size: 1.3em;
+    margin-bottom: 12px;
+}
+
+.sidebar-controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* 對話標籤 */
+.conversation-tabs {
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.conversation-tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.conversation-tabs::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.conversation-tab {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-right: 8px;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.conversation-tab:hover {
+    background: #e8f4f8;
+    border-color: #667eea;
+}
+
+.conversation-tab.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.conversation-tab .tab-avatars {
+    font-size: 1.1em;
+}
+
+.conversation-tab .tab-count {
+    margin-left: 5px;
+    opacity: 0.8;
+    font-size: 0.9em;
+}
+
+.conversation-list {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    max-height: 580px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 0.95em;
+}
+
+.message {
+    margin-bottom: 15px;
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.message-avatar {
+    font-size: 1.2em;
+}
+
+.message-author {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.message-time {
+    color: #999;
+    font-size: 0.75em;
+    margin-left: auto;
+}
+
+.message-text {
+    background: #f0f2f5;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: #333;
+    line-height: 1.4;
+    font-size: 0.9em;
+    margin-left: 30px;
+}
+
+.message.male .message-text {
+    background: #e3f2fd;
+}
+
+.message.female .message-text {
+    background: #fce4ec;
+}
+
+.sidebar-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.sidebar-footer span {
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* 底部面板容器 */
+.bottom-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* 角色面板 */
+.characters-panel {
+    padding: 25px 30px;
+    background: white;
+    border-right: 1px solid #e0e0e0;
+}
+
+.characters-panel h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+/* 關係面板 */
+.relationships-panel {
+    padding: 25px 30px;
+    background: #f8f9fa;
+}
+
+.relationships-panel h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.characters-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.character-card {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+}
+
+.character-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.character-card.male {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-color: #64b5f6;
+}
+
+.character-card.female {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    border-color: #f48fb1;
+}
+
+.character-card.talking {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.character-avatar {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+.character-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.95em;
+    margin-bottom: 3px;
+}
+
+.character-occupation {
+    color: #666;
+    font-size: 0.8em;
+    margin-bottom: 8px;
+}
+
+.character-traits {
+    margin-top: 6px;
+    font-size: 0.7em;
+    line-height: 1.4;
+}
+
+.character-traits .trait-label {
+    font-weight: bold;
+    margin-right: 3px;
+}
+
+.character-traits.positive {
+    color: #2e7d32;
+}
+
+.character-traits.positive .trait-label {
+    color: #43a047;
+}
+
+.character-traits.negative {
+    color: #c62828;
+}
+
+.character-traits.negative .trait-label {
+    color: #e53935;
+}
+
+.character-traits .trait {
+    display: inline-block;
+    padding: 1px 4px;
+    margin: 1px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* 按鈕樣式 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #5568d3;
+}
+
+.btn-secondary {
+    background: #48bb78;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #38a169;
+}
+
+.btn-secondary.paused {
+    background: #fc8181;
+}
+
+.btn-warning {
+    background: #ed8936;
+    color: white;
+}
+
+.btn-warning:hover:not(:disabled) {
+    background: #dd6b20;
+}
+
+.btn-success {
+    background: #4299e1;
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #3182ce;
+}
+
+.btn-danger {
+    background: #f56565;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #e53e3e;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
+
+/* 自訂滾動條 */
+.conversation-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.conversation-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.conversation-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+.conversation-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 關係網格 */
+.relationships-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.relationship-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+}
+
+.relationship-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.relationship-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.relationship-avatars {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5em;
+}
+
+.relationship-names {
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.relationship-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.affinity-bar {
+    flex: 1;
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.affinity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    transition: width 0.5s ease, background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: white;
+}
+
+.affinity-fill.low {
+    background: linear-gradient(90deg, #fc8181, #f56565);
+}
+
+.affinity-fill.medium {
+    background: linear-gradient(90deg, #f6ad55, #ed8936);
+}
+
+.affinity-fill.high {
+    background: linear-gradient(90deg, #48bb78, #38a169);
+}
+
+.affinity-value {
+    font-weight: bold;
+    font-size: 1.1em;
+    min-width: 35px;
+    text-align: right;
+}
+
+.affinity-value.low {
+    color: #f56565;
+}
+
+.affinity-value.medium {
+    color: #ed8936;
+}
+
+.affinity-value.high {
+    color: #48bb78;
+}
+
+.relationship-change {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.relationship-change.positive {
+    color: #48bb78;
+}
+
+.relationship-change.negative {
+    color: #f56565;
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .conversation-list {
+        max-height: 300px;
+    }
+
+    .bottom-panels {
+        grid-template-columns: 1fr;
+    }
+
+    .characters-panel {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .map-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .map-controls {
+        width: 100%;
+    }
+
+    .btn {
+        flex: 1;
+    }
+
+    .characters-list {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .relationships-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(nvm list)",
+      "Bash(nvm use:*)",
+      "Bash(/Users/kevin.zhuang/.nvm/versions/node/v20.12.2/bin/npm install)",
+      "Bash(bash -c \"source ~/.nvm/nvm.sh && nvm use 20.12.2 && npm install\")",
+      "Bash(bash -c \"source ~/.nvm/nvm.sh && nvm use 20.12.2 && npm start\")",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

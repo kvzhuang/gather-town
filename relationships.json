@@ -1,0 +1,44 @@
+{
+  "alex": {
+    "david": 64,
+    "kevin": 49,
+    "sophia": 57,
+    "emma": 100,
+    "olivia": 57
+  },
+  "david": {
+    "alex": 64,
+    "kevin": 100,
+    "sophia": 62,
+    "emma": 63,
+    "olivia": 100
+  },
+  "kevin": {
+    "alex": 49,
+    "david": 100,
+    "sophia": 100,
+    "emma": 50,
+    "olivia": 64
+  },
+  "sophia": {
+    "alex": 57,
+    "david": 62,
+    "kevin": 100,
+    "emma": 68,
+    "olivia": 97
+  },
+  "emma": {
+    "alex": 100,
+    "david": 63,
+    "kevin": 50,
+    "sophia": 68,
+    "olivia": 65
+  },
+  "olivia": {
+    "alex": 57,
+    "david": 100,
+    "kevin": 64,
+    "sophia": 97,
+    "emma": 65
+  }
+}
